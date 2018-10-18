@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import java.math.BigInteger
 import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity() {
@@ -13,41 +12,51 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnCalculate.setOnClickListener {
-            if (edtInput.text.isEmpty()) {
-                showError("Empty value !!!")
-                return@setOnClickListener
-            }
-
-            var number = 0
-            try {
-                number = edtInput.text.toString().trim().toInt()
-            } catch (e:NumberFormatException) {
-            }
-
-            if(number > Int.MAX_VALUE || number < Int.MIN_VALUE) {
-                showError("Out of range !!!")
-                return@setOnClickListener
-            }
-            val result = printExpArray(primeFactors(number))
-            edtInput.setText(result)
-        }
-        btnClear.setOnClickListener { edtInput.text.clear() }
+        registerListener()
     }
 
-    private fun primeFactors(n: Int): HashMap<Int, Int> {
+    private fun registerListener() {
+        btnCalculate.setOnClickListener {
+            onCalculate()
+        }
+        btnClear.setOnClickListener { onClear() }
+    }
+
+    private fun onCalculate() {
+        if (edtInput.text.isEmpty()) {
+            showError("Empty value !!!")
+            return
+        }
+
+        var number = 0L
+        try {
+            number = edtInput.text.toString().trim().toLong()
+        } catch (e: NumberFormatException) {
+            showError("Out of range !!!")
+            return
+        }
+
+        val result = printExpArray(primeFactors(number))
+        edtInput.setText(result)
+    }
+
+    private fun onClear() {
+        edtInput.text.clear()
+    }
+
+    private fun primeFactors(n: Long): HashMap<Long, Int> {
         var number = n
-        val hm = HashMap<Int, Int>()
+        val hm = HashMap<Long, Int>()
 
-        if(number == 0) return hm
+        if (number == 0L) return hm
 
-        while (number % 2 == 0) {
+        while (number % 2 == 0L) {
             pushTo(hm, 2)
             number /= 2
         }
 
-        for (i: Int in 3..sqrt(number.toDouble()).toInt() step 2) {
-            while (number % i == 0) {
+        for (i: Long in 3..sqrt(number.toDouble()).toLong() step 2) {
+            while (number % i == 0L) {
                 number /= i
                 pushTo(hm, i)
             }
@@ -63,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * Push an number to hashmap.
      */
-    private fun pushTo(hm: HashMap<Int, Int>, key: Int) {
+    private fun pushTo(hm: HashMap<Long, Int>, key: Long) {
         // Insert elements and their frequencies in hashmap.
         if (!hm.containsKey(key)) {
             hm.put(key, 1)
@@ -75,7 +84,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * Print result with exp array.
      */
-    private fun printExpArray(hashMap: HashMap<Int, Int>): String {
+    private fun printExpArray(hashMap: HashMap<Long, Int>): String {
         var result = ""
         for (item in hashMap) {
             result += item.key.toString()
@@ -89,7 +98,8 @@ class MainActivity : AppCompatActivity() {
         return result.trim()
     }
 
-    private fun showError(str:String) {
-//        Snackbar.make(this.root, "Error", Snackbar.LENGTH_LONG);
+    private fun showError(str: String) {
+        onClear()
+        Snackbar.make(findViewById(android.R.id.content), str, Snackbar.LENGTH_LONG).show()
     }
 }
