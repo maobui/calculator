@@ -36,6 +36,11 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        if (number > Int.MAX_VALUE) {
+            showError("Out of range. Now just support MAX " + Int.MAX_VALUE)
+            return
+        }
+
         val result = printExpArray(primeFactors(number))
         edtInput.setText(result)
     }
@@ -44,9 +49,9 @@ class MainActivity : AppCompatActivity() {
         edtInput.text.clear()
     }
 
-    private fun primeFactors(n: Long): HashMap<Long, Int> {
+    private fun primeFactors(n: Long): LinkedHashMap<Long, Int> {
         var number = n
-        val hm = HashMap<Long, Int>()
+        val hm = LinkedHashMap<Long, Int>()
 
         if (number == 0L) return hm
 
@@ -72,7 +77,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * Push an number to hashmap.
      */
-    private fun pushTo(hm: HashMap<Long, Int>, key: Long) {
+    private fun pushTo(hm: LinkedHashMap<Long, Int>, key: Long) {
         // Insert elements and their frequencies in hashmap.
         if (!hm.containsKey(key)) {
             hm.put(key, 1)
@@ -84,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * Print result with exp array.
      */
-    private fun printExpArray(hashMap: HashMap<Long, Int>): String {
+    private fun printExpArray(hashMap: LinkedHashMap<Long, Int>): String {
         var result = ""
         for (item in hashMap) {
             result += item.key.toString()
