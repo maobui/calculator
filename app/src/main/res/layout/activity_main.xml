@@ -7,25 +7,29 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-    <LinearLayout
-            android:orientation="vertical"
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:ems="10"
-                android:id="@+id/edtInput" android:maxLength="19"/>
+                android:id="@+id/edtInput"/>
         <Button
                 android:text="Calculate"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/btnCalculate" tools:layout_editor_absoluteY="46dp"
-                tools:layout_editor_absoluteX="7dp"/>
+                android:layout_height="wrap_content" android:id="@+id/btnCalculate"
+                android:layout_below="@+id/edtInput"
+                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"/>
         <Button
                 android:text="Clear"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/btnClear" tools:layout_editor_absoluteY="181dp"
-                tools:layout_editor_absoluteX="0dp"/>
-    </LinearLayout>
+                android:layout_height="wrap_content" android:id="@+id/btnClear"
+                android:layout_below="@+id/edtInput"
+                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+                android:layout_marginEnd="125dp"
+                android:layout_toLeftOf="@id/btnClear"
+        />
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
