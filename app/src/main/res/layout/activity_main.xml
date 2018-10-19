@@ -9,27 +9,31 @@
 
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" android:layout_margin="8dp" tools:layout_editor_absoluteY="8dp"
+            tools:layout_editor_absoluteX="8dp">
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:id="@+id/edtInput"/>
+                android:id="@+id/edtInput" android:background="@android:color/transparent"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/edtOutput" android:layout_below="@+id/edtInput"
+                android:editable="false" android:clickable="false" android:gravity="right"
+                android:focusable="false" android:background="@android:color/transparent"/>
         <Button
                 android:text="Calculate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/btnCalculate"
-                android:layout_below="@+id/edtInput"
                 android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
-                android:layout_marginEnd="16dp"/>
+                android:layout_below="@+id/edtOutput"/>
         <Button
                 android:text="Clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/btnClear"
-                android:layout_below="@+id/edtInput"
-                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
-                android:layout_marginEnd="125dp"
-                android:layout_toLeftOf="@id/btnClear"
+                android:layout_below="@+id/edtOutput" android:layout_toLeftOf="@+id/btnCalculate"/>
+        <!--android:layout_alignParentRight="true" android:layout_alignParentEnd="true"-->
+        android:layout_toLeftOf="@id/btnCalculate"
         />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

@@ -3,16 +3,43 @@ package com.me.bui.calculator
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import com.me.bui.calculator.utils.PrimeFactorization
+import com.me.bui.calculator.utils.PrimeFactors
+import com.me.bui.calculator.utils.RxUtils
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlin.math.sqrt
+import java.util.concurrent.Callable
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        val TAG = MainActivity::class.java.simpleName
+    }
+
+    val mCompositeDisposable = CompositeDisposable()
+    var mUseFasterFactory = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         registerListener()
+    }
+
+    override fun onDestroy() {
+        if (mCompositeDisposable != null) {
+            mCompositeDisposable.dispose()
+        }
+        super.onDestroy()
+    }
+
+    private fun getCompositeDisposable(): CompositeDisposable {
+        return mCompositeDisposable
     }
 
     private fun registerListener() {
@@ -28,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        var number = 0L
+        var number: Long
         try {
             number = edtInput.text.toString().trim().toLong()
         } catch (e: NumberFormatException) {
@@ -36,54 +63,43 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        if (number > Int.MAX_VALUE) {
-            showError("Out of range. Now just support MAX " + Int.MAX_VALUE)
-            return
-        }
+        getPrimeFactors(number)
+    }
 
-        val result = printExpArray(primeFactors(number))
-        edtInput.setText(result)
+    private fun getPrimeFactors(number: Long) {
+        getCompositeDisposable().add(
+            getPrimeFactorsRx(number)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableObserver<LinkedHashMap<Long, Int>>() {
+                    override fun onComplete() {
+                        Log.d(TAG , "Done !!!")
+                    }
+
+                    override fun onNext(t: LinkedHashMap<Long, Int>) {
+                        updateUI(t)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        showError(e.toString())
+                    }
+                })
+        )
+    }
+
+    private fun updateUI(hm: LinkedHashMap<Long, Int>) {
+        if (hm.size > 0) {
+            val result = printExpArray(hm)
+            edtOutput.text.clear()
+            edtOutput.setText(result)
+        } else {
+            showError("Don't support this number !!!")
+        }
     }
 
     private fun onClear() {
         edtInput.text.clear()
-    }
-
-    private fun primeFactors(n: Long): LinkedHashMap<Long, Int> {
-        var number = n
-        val hm = LinkedHashMap<Long, Int>()
-
-        if (number == 0L) return hm
-
-        while (number % 2 == 0L) {
-            pushTo(hm, 2)
-            number /= 2
-        }
-
-        for (i: Long in 3..sqrt(number.toDouble()).toLong() step 2) {
-            while (number % i == 0L) {
-                number /= i
-                pushTo(hm, i)
-            }
-        }
-
-        // is a prime number > 2.
-        if (number > 2) {
-            pushTo(hm, number)
-        }
-        return hm
-    }
-
-    /**
-     * Push an number to hashmap.
-     */
-    private fun pushTo(hm: LinkedHashMap<Long, Int>, key: Long) {
-        // Insert elements and their frequencies in hashmap.
-        if (!hm.containsKey(key)) {
-            hm.put(key, 1)
-        } else {
-            hm.put(key, hm.get(key)!! + 1)
-        }
+        edtOutput.text.clear()
     }
 
     /**
@@ -106,5 +122,17 @@ class MainActivity : AppCompatActivity() {
     private fun showError(str: String) {
         onClear()
         Snackbar.make(findViewById(android.R.id.content), str, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun primeFactorsRx(number: Long): Observable<LinkedHashMap<Long, Int>> {
+        return RxUtils.makeObservable(Callable { PrimeFactors.primeFactors(number) })
+    }
+
+    private fun getFactorsRx(number: Long): Observable<LinkedHashMap<Long, Int>> {
+        return RxUtils.makeObservable(Callable { PrimeFactorization.getFactors(number) })
+    }
+
+    private fun getPrimeFactorsRx(number: Long): Observable<LinkedHashMap<Long, Int>> {
+        return if (mUseFasterFactory) getFactorsRx(number) else primeFactorsRx(number)
     }
 }
