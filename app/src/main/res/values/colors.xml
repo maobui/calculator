@@ -3,4 +3,44 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="color1">#4A7BA7</color>
+    <color name="color2">#04B4B3</color>
+    <color name="color3">#10CAC9</color>
+    <color name="color4">#F5A623</color>
+    <color name="color5">#FF7D50</color>
+    <color name="color6">#FC6644</color>
+    <color name="color7">#E75F40</color>
+    <color name="color8">#E13A20</color>
+    <color name="color9">#D93218</color>
+    <color name="color10">#C03823</color>
+    <color name="color11">#e51c23</color>
+    <color name="color12">#e91e63</color>
+    <color name="color13">#9c27b0</color>
+    <color name="color14">#673ab7</color>
+    <color name="color15">#3f51b5</color>
+    <color name="color16">#5677fc</color>
+    <color name="color17">#03a9f4</color>
+    <color name="color18">#00bcd4</color>
+    <color name="color19">#009688</color>
+    <color name="color20">#259b24</color>
+    <color name="color21">#8bc34a</color>
+    <color name="color22">#cddc39</color>
+    <color name="color23">#ffeb3b</color>
+    <color name="color24">#ff9800</color>
+    <color name="color25">#ff5722</color>
+    <color name="color26">#795548</color>
+    <color name="color27">#9e9e9e</color>
+    <color name="color28">#607d8b</color>
+
+    <!--color state-->
+    <color name="primary">	#007bff</color>
+    <color name="secondary">#6c757d</color>
+    <color name="success">#28a745</color>
+    <color name="danger">#dc3545</color>
+    <color name="warning">#ffc107</color>
+    <color name="info">#17a2b8</color>
+    <color name="light">#f8f9fa</color>
+    <color name="dark">#343a40</color>
+    <color name="link">#00000000</color>
 </resources>

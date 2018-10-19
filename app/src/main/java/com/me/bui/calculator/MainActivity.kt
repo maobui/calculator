@@ -1,8 +1,12 @@
 package com.me.bui.calculator
 
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.text.HtmlCompat.FROM_HTML_MODE_COMPACT
+import android.support.v4.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import android.support.v7.app.AppCompatActivity
+import android.text.Html
 import android.util.Log
 import com.me.bui.calculator.utils.PrimeFactorization
 import com.me.bui.calculator.utils.PrimeFactors
@@ -91,7 +95,11 @@ class MainActivity : AppCompatActivity() {
         if (hm.size > 0) {
             val result = printExpArray(hm)
             edtOutput.text.clear()
-            edtOutput.setText(result)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                edtOutput.setText(Html.fromHtml(result, FROM_HTML_MODE_LEGACY))
+            } else {
+                edtOutput.setText(Html.fromHtml(result))
+            }
         } else {
             showError("Don't support this number !!!")
         }
@@ -106,17 +114,17 @@ class MainActivity : AppCompatActivity() {
      * Print result with exp array.
      */
     private fun printExpArray(hashMap: LinkedHashMap<Long, Int>): String {
-        var result = ""
+        var result = "<p>"
         for (item in hashMap) {
             result += item.key.toString()
             if (item.value != 1) {
-                result += "^" + item.value.toString()
+                result += "<sup>" + item.value.toString() + "</sup>"
             }
             result += " x "
         }
         // Remove ' x ' end of result.
-        result = result.substringBeforeLast("x", result)
-        return result.trim()
+        result = result.substringBeforeLast("x", result) + "</p>"
+        return result
     }
 
     private fun showError(str: String) {

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
@@ -11,29 +10,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:layout_margin="8dp" tools:layout_editor_absoluteY="8dp"
             tools:layout_editor_absoluteX="8dp">
-        <EditText
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:id="@+id/edtInput" android:background="@android:color/transparent"/>
-        <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/edtOutput" android:layout_below="@+id/edtInput"
-                android:editable="false" android:clickable="false" android:gravity="right"
-                android:focusable="false" android:background="@android:color/transparent"/>
+                android:layout_height="wrap_content" android:id="@+id/llIO">
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edtInput" style="@style/EditTextInput"/>
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/edtOutput"
+                    android:layout_below="@+id/edtInput"
+                    android:inputType="text" android:clickable="false" android:gravity="right"
+                    android:focusable="false" style="@style/EditTextOutput"/>
+        </LinearLayout>
         <Button
                 android:text="Calculate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/btnCalculate"
                 android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
-                android:layout_below="@+id/edtOutput"/>
+                android:layout_below="@id/llIO" style="@style/ButtonNormal"/>
         <Button
                 android:text="Clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/btnClear"
-                android:layout_below="@+id/edtOutput" android:layout_toLeftOf="@+id/btnCalculate"/>
-        <!--android:layout_alignParentRight="true" android:layout_alignParentEnd="true"-->
-        android:layout_toLeftOf="@id/btnCalculate"
-        />
+                android:layout_below="@+id/llIO" android:layout_toLeftOf="@+id/btnCalculate"
+                android:layout_marginRight="8dp" style="@style/ButtonWarning"/>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
